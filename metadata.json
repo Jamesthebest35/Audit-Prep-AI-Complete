@@ -1,0 +1,7 @@
+{
+  "name": "Nodaysoffai: AI Audit Preparedness Co-Pilot",
+  "description": "An elite AI Audit Preparedness Co-Pilot to help enterprise organizations achieve and maintain 'Audit Excellence' across multiple compliance frameworks.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

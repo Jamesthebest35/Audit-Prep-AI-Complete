@@ -1,8 +1,8 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { GoogleGenAI, LiveServerMessage, Modality, Blob } from '@google/genai';
-// Fix: Add FileTextIcon, ZapIcon, BarChartIcon, BrainCircuitIcon to Icon.tsx and import them here.
+import { LiveServerMessage, Modality, Blob } from '@google/genai';
 import { ShieldCheckIcon, FileTextIcon, ZapIcon, BarChartIcon, BrainCircuitIcon } from '../shared/Icon';
+import { createGeminiClient, GEMINI_KEY_INSTRUCTIONS } from '../../lib/genaiClient';
 
 // --- Start: Audio Helper Functions ---
 function encode(bytes: Uint8Array) {
@@ -152,12 +152,22 @@ export const AuditSimulation: React.FC = () => {
     setSimulationState('starting');
     setSessionStartTime(Date.now());
 
+    const ai = createGeminiClient();
+    if (!ai) {
+      setSimulationState('idle');
+      setError(`Gemini API key missing. ${GEMINI_KEY_INSTRUCTIONS}`);
+      return;
+    }
+
+    if (!navigator?.mediaDevices?.getUserMedia) {
+      setSimulationState('idle');
+      setError('Live audio interviews require microphone access, which is not supported in this browser.');
+      return;
+    }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStreamRef.current = stream;
-
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
       inputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
       outputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
@@ -250,7 +260,11 @@ export const AuditSimulation: React.FC = () => {
       });
     } catch (err) {
       console.error('Failed to start simulation:', err);
-      setError('Could not access microphone. Please grant permission and try again.');
+      let message = 'Could not access the microphone. Please grant permission and try again.';
+      if (err instanceof DOMException && err.name === 'NotAllowedError') {
+        message = 'Microphone permission is required to run the live simulation.';
+      }
+      setError(message);
       setSimulationState('idle');
     }
   };
@@ -263,12 +277,17 @@ export const AuditSimulation: React.FC = () => {
     const reportPrompt = `Based on the following audit interview transcript, provide a summary of the interviewee's performance, identify key strengths and weaknesses, and suggest actionable improvements for better audit readiness. Format the response as a professional report in markdown. Use headings for "Overall Summary", "Strengths", "Areas for Improvement", and "Actionable Recommendations". \n\nTranscript:\n\n${fullTranscript}`;
     
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+        const ai = createGeminiClient();
+        if (!ai) {
+            setFinalReport(`Gemini API key missing. ${GEMINI_KEY_INSTRUCTIONS}`);
+            setSimulationState('report');
+            return;
+        }
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-pro',
             contents: reportPrompt,
         });
-        setFinalReport(response.text);
+        setFinalReport(response.text ?? '');
     } catch (err) {
         console.error("Failed to generate report:", err);
         setFinalReport("Could not generate a report at this time.");
@@ -384,7 +403,11 @@ const ReportScreen: React.FC<{report: string, onRestart: () => void}> = ({report
             </button>
         </div>
         <div className="flex-1 overflow-y-auto bg-gray-light p-6 rounded-lg border border-gray-border">
-            <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: report.replace(/\n/g, '<br />').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+            {report ? (
+                <pre className="whitespace-pre-wrap text-sm text-gray-800 leading-relaxed font-sans">{report}</pre>
+            ) : (
+                <p className="text-gray-500 text-sm">No report generated for this session.</p>
+            )}
         </div>
     </div>
 );

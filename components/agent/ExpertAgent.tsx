@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI } from '@google/genai';
 import { BrainCircuitIcon, BotIcon, SendIcon, UserIcon } from '../shared/Icon';
+import { createGeminiClient, GEMINI_KEY_INSTRUCTIONS, getGeminiApiKey } from '../../lib/genaiClient';
 
 interface ChatMessage {
   sender: 'user' | 'ai';
@@ -23,6 +23,7 @@ export const ExpertAgent: React.FC = () => {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isThinkingMode, setIsThinkingMode] = useState(false);
+    const [hasApiKey, setHasApiKey] = useState<boolean>(() => Boolean(getGeminiApiKey()));
     const chatEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -38,9 +39,16 @@ export const ExpertAgent: React.FC = () => {
         setInput('');
         setIsLoading(true);
 
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+        const ai = createGeminiClient();
 
         try {
+            if (!ai) {
+                const guidance = `⚠️ Gemini API key missing.\n${GEMINI_KEY_INSTRUCTIONS}`;
+                setHasApiKey(false);
+                setMessages(prev => [...prev, { sender: 'ai', text: guidance }]);
+                return;
+            }
+            setHasApiKey(true);
             if (isThinkingMode) {
                 // Complex queries with Thinking Mode
                 const response = await ai.models.generateContent({
@@ -100,6 +108,12 @@ export const ExpertAgent: React.FC = () => {
             </div>
 
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                  {!hasApiKey && (
+                      <div className="bg-yellow-50 border border-status-yellow text-status-yellow px-4 py-3 rounded-lg text-sm leading-relaxed">
+                          <strong className="block font-semibold mb-1 text-status-yellow">Gemini API key required</strong>
+                          {GEMINI_KEY_INSTRUCTIONS}
+                      </div>
+                  )}
                 {messages.map((msg, index) => (
                     <div key={index} className={`flex items-start gap-3 ${msg.sender === 'user' ? 'flex-row-reverse' : ''}`}>
                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white ${msg.sender === 'ai' ? 'bg-brand-primary' : 'bg-gray-400'}`}>

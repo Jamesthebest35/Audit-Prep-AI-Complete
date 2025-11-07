@@ -30,28 +30,30 @@ const App: React.FC = () => {
     setCurrentView('findings');
   }
 
-  const renderContent = () => {
-    switch (currentView) {
-      case 'dashboard':
-        return <Dashboard onFilterSelect={handleSetFilterAndNavigate} />;
-      case 'simulation':
-        return <AuditSimulation />;
-      case 'agent':
-        return <ExpertAgent />;
-      case 'findings':
-        return <FindingsTracker 
-            findings={findings}
-            setFindings={setFindings}
-            searchQuery={searchQuery}
-            initialFilter={findingsFilter}
-            clearInitialFilter={() => setFindingsFilter(null)}
-        />;
-      case 'training':
-        return <TrainingPaths />;
-      default:
-        return <Dashboard onFilterSelect={handleSetFilterAndNavigate}/>;
-    }
-  };
+    const renderContent = () => {
+      switch (currentView) {
+        case 'dashboard':
+          return <Dashboard findings={findings} onFilterSelect={handleSetFilterAndNavigate} />;
+        case 'simulation':
+          return <AuditSimulation />;
+        case 'agent':
+          return <ExpertAgent />;
+        case 'findings':
+          return (
+            <FindingsTracker
+              findings={findings}
+              setFindings={setFindings}
+              searchQuery={searchQuery}
+              initialFilter={findingsFilter}
+              clearInitialFilter={() => setFindingsFilter(null)}
+            />
+          );
+        case 'training':
+          return <TrainingPaths />;
+        default:
+          return <Dashboard findings={findings} onFilterSelect={handleSetFilterAndNavigate} />;
+      }
+    };
 
   return (
     <div className="flex h-screen bg-gray-light font-sans text-gray-dark">

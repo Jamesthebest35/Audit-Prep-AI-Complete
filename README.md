@@ -4,17 +4,45 @@
 
 # Run and deploy your AI Studio app
 
-This contains everything you need to run your app locally.
+This repo contains everything you need to run the Nodaysoffai AI Audit Co-Pilot locally.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1EI_CQciMwW6QUmVMVqQ4m4SPy1IUUsKn
+View the hosted experience in AI Studio: https://ai.studio/apps/drive/1EI_CQciMwW6QUmVMVqQ4m4SPy1IUUsKn
 
-## Run Locally
+## Features
 
-**Prerequisites:**  Node.js
+- Real-time audit interview simulator with live transcription, pacing metrics, and auto-generated performance reports.
+- Gemini-powered expert agent with a fast response mode and a deep "Thinking Mode" for complex strategy questions.
+- Findings tracker with inline editing, severity filtering, and dashboard summaries that stay in sync with your data.
+- Tailwind-based dashboard for documentation health, audit risk scoring, and role-based training plans.
 
+## Prerequisites
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- Node.js 18+
+- A Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey)
+
+## Configure environment variables
+
+1. Copy `.env.local.example` to `.env.local`:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+2. Edit `.env.local` and add your key:
+   ```bash
+   VITE_GEMINI_API_KEY=your-real-key
+   ```
+3. Restart the dev server whenever you change `.env.local`.
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+The app will be available at http://localhost:3000.
+
+To build a production bundle:
+
+```bash
+npm run build
+```

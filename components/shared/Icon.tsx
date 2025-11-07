@@ -179,3 +179,86 @@ export const BrainCircuitIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props)
         <path d="m18 14 2-2-2-2" />
     </Icon>
 );
+
+export const PlusIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+    </Icon>
+);
+
+export const StarSolidIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon fill="currentColor" stroke="none" {...props}>
+        <polygon points="12 3 14.89 8.62 21 9.64 16.5 13.97 17.64 20.02 12 17.27 6.36 20.02 7.5 13.97 3 9.64 9.11 8.62 12 3" />
+    </Icon>
+);
+
+export const StarOutlineIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <polygon points="12 3 14.89 8.62 21 9.64 16.5 13.97 17.64 20.02 12 17.27 6.36 20.02 7.5 13.97 3 9.64 9.11 8.62 12 3" fill="none" />
+    </Icon>
+);
+
+export const PinIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <path d="M16 3a4 4 0 0 1 4 4v1a2 2 0 0 1-.68 1.5L18 11v2l1 2H5l1-2v-2l-1.32-1.5A2 2 0 0 1 4 8V7a4 4 0 0 1 4-4z" />
+        <path d="M12 21v-6" />
+    </Icon>
+);
+
+export const ArchiveIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <rect width="20" height="5" x="2" y="3" rx="1" />
+        <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8" />
+        <path d="M10 12h4" />
+    </Icon>
+);
+
+export const NotebookIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <path d="M4 4h12a2 2 0 0 1 2 2v14H4z" />
+        <path d="M4 8h16" />
+        <path d="M8 4v16" />
+    </Icon>
+);
+
+export const CalendarIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <rect width="18" height="18" x="3" y="4" rx="2" />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+    </Icon>
+);
+
+export const StackIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <path d="m12 2 9 4-9 4-9-4 9-4z" />
+        <path d="m3 10 9 4 9-4" />
+        <path d="m3 18 9 4 9-4" />
+    </Icon>
+);
+
+export const TagIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <path d="M2 10V2h8l12 12-8 8L2 10z" />
+        <path d="M7 7h.01" />
+    </Icon>
+);
+
+export const ClockIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+    </Icon>
+);
+
+export const TrashIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <Icon {...props}>
+        <path d="M3 6h18" />
+        <path d="M8 6V4h8v2" />
+        <path d="M19 6v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+        <line x1="10" y1="11" x2="10" y2="17" />
+        <line x1="14" y1="11" x2="14" y2="17" />
+    </Icon>
+);

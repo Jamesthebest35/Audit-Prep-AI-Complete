@@ -1,28 +1,31 @@
-export type ViewType = 'dashboard' | 'simulation' | 'findings' | 'training' | 'agent';
+export type NoteStatus = 'active' | 'archived';
 
-export interface ChatMessage {
-  sender: 'user' | 'astra';
-  content: string;
-}
+export type NoteFilter = 'all' | 'favorites' | 'today' | 'archived';
 
-export enum FindingSeverity {
-  Major = 'Major Non-Conformity',
-  Minor = 'Minor Non-Conformity',
-  Observation = 'Observation',
-}
+export type SortOption = 'updated' | 'created' | 'title';
 
-export interface AuditFinding {
+export interface Tag {
   id: string;
-  severity: FindingSeverity;
-  issue: string;
-  due: string;
-  status: 'On Track' | 'At Risk' | 'Overdue';
-  owner: string;
-  standard: string;
+  name: string;
+  color: string;
 }
 
-export interface Notification {
-    id: number;
-    text: string;
-    time: string;
+export interface Notebook {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+export interface Note {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  notebookId: string;
+  tags: string[];
+  favorite: boolean;
+  pinned: boolean;
+  status: NoteStatus;
+  coverColor?: string;
 }
